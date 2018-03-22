@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: trening
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbuserpw
+    ports:
+      - 127.0.0.1:3306:3306
+    volumes:
+      - dbvolume:/var/lib/mysql
+volumes:
+  dbvolume:
