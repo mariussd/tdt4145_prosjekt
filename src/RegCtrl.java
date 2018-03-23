@@ -1,10 +1,9 @@
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class RegCtrl extends DBConn {
+public class RegCtrl extends DBCon {
 	
 	public RegCtrl() {
 		connect();
@@ -38,13 +37,11 @@ public class RegCtrl extends DBConn {
 		
 	}
 	
-	public void regovelse() {
+	//Registrerer en øvelse – ikke gjennomførelse
+	public void regovelsemedapparat() {
 		String navn;
-		String kilo;
-		String sett;
 		String apparat;
 		String beskrivelse;
-		String type;
 		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Øvelsenavn: ");
@@ -53,17 +50,6 @@ public class RegCtrl extends DBConn {
 			navn = "null";
 		}
 		
-		System.out.println("Antall kilo: ");
-		kilo = "'" + sc.nextLine() + "'";
-		if (kilo.equals("'null'")) {
-			kilo = "null";
-		}
-		
-		System.out.println("Antall sett: ");
-		sett = "'" + sc.nextLine() + "'";
-		if (sett.equals("'null'")) {
-			sett = "null";
-		}
 		
 		System.out.println("Apparatnavn: ");
 		apparat = "'" + sc.nextLine() + "'";
@@ -77,18 +63,73 @@ public class RegCtrl extends DBConn {
 			beskrivelse = "null";
 		}
 		
-		System.out.println("Montert eller fri? (M/F): ");
-		type = "'" + sc.nextLine().toLowerCase() + "'";
-		if (type.equals("'null'")) {
-			type = "null";
-		}
-		if(!(type.equals("'f'")||type.equals("'m'"))){
-			throw new IllegalArgumentException("Feil type, bruk f eller m.");
-		}
+
 		
 		Integer autoKey = null;
 		try {
-			java.sql.PreparedStatement ps = conn.prepareStatement("INSERT INTO Øvelse (Navn, Antall_kilo, Antall_sett, Apparat_navn, Beskrivelse, Øvelse_type) VALUES("+navn+","+kilo+","+sett+","+apparat+","+beskrivelse+","+type+")",Statement.RETURN_GENERATED_KEYS);
+			java.sql.PreparedStatement ps = conn.prepareStatement("INSERT INTO ØvelseMedApparat (Navn, Apparat_navn, Beskrivelse) VALUES("+navn+","+apparat+","+beskrivelse+")",Statement.RETURN_GENERATED_KEYS);
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			if(rs.next()){
+				autoKey = rs.getInt(1);
+			}
+		}catch(Exception e) {
+			System.out.println("db error during insert of øvelse: "+e);
+		}
+		
+		while (true) {
+			System.out.println("Øvelsesgruppe tilhørlighet (oppgi ØvelsesgruppeID (Skriv end når ferdig)):");
+			
+			try {
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery("SELECT * FROM Øvelsesgruppe");
+				System.out.println("Øvelsegruppeliste: ");
+				while(!rs.isLast()) {
+					rs.next();
+					System.out.println("GruppeID: "+rs.getString("GruppeID")+" "+"Navn: "+rs.getString("Navn"));
+				}
+			}catch(Exception e){
+				System.out.println("db error during select of øvelsegruppe list: "+e);
+			}
+			
+			String øvelsesgruppe = sc.next(); 
+			if (øvelsesgruppe.toLowerCase().equals("end")) {
+				break;
+			}
+			
+			try {
+				Statement st = conn.createStatement();
+				st.executeUpdate("INSERT INTO Øvelse_i_gruppe VALUES("+"'"+autoKey+"'"+","+"'"+øvelsesgruppe+"'"+")");
+			}catch(Exception e) {
+				System.out.println("db error during insert of øvelse_i_gruppe: "+e);
+			}
+			
+		}
+		
+	}
+	
+	public void regovelseutenapparat() {
+		String navn;
+		String beskrivelse;
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Øvelsenavn: ");
+		navn = "'" + sc.nextLine() + "'";
+		if (navn.equals("'null'")) {
+			navn = "null";
+		}
+		
+		System.out.println("Beskrivelse: ");
+		beskrivelse = "'" + sc.nextLine() + "'";
+		if (beskrivelse.equals("'null'")) {
+			beskrivelse = "null";
+		}
+		
+
+		
+		Integer autoKey = null;
+		try {
+			java.sql.PreparedStatement ps = conn.prepareStatement("INSERT INTO Øvelse (Navn, Apparat_navn, Beskrivelse) VALUES("+navn+","+beskrivelse+")",Statement.RETURN_GENERATED_KEYS);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs.next()){
@@ -133,7 +174,7 @@ public class RegCtrl extends DBConn {
 	public void regTreningsokt(int pnrFK) {
 		String dateTime; // format: YYYY-MM-DD HH:MM:SS
 		String varighet;
-		String form; // format: talle mellom 1 og 10
+		String form; // format: tall mellom 1 og 10
 		String prestasjon; // format: tall mellom 1 og 10
 		String pnrFKStr = "'" + Integer.toString(pnrFK) + "'";
 		
