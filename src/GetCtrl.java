@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.Scanner;
 
 
-public class GetCtrl extends DBConn {
+public class GetCtrl extends DBCon {
 	
 	public GetCtrl() {
 		connect();

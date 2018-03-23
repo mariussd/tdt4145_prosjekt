@@ -22,7 +22,6 @@ public class Main{
 	}
 	
 	public static void registerOkt() {
-		//TODO
 		try {
 			if(checkIfInt(loggedInPnr)) {
 				registerController.regTreningsokt(Integer.parseInt(loggedInPnr));
@@ -34,17 +33,18 @@ public class Main{
 	}
 	
 	public static void registerOvelse() {
-		//TODO
-		registerController.regovelse();
+		registerController.regovelseutenapparat();
+	}
+	
+	public static void registerOvelseMedApparat() {
+		registerController.regovelsemedapparat();
 	}
 	
 	public static void registerApparat() {
-		//TODO
 		registerController.regApparat();
 	}
 	
 	public static void registerOvelsesgruppe() {
-		//TODO
 		registerController.regOvelseGruppe();
 	}
 	
@@ -59,9 +59,6 @@ public class Main{
 		}
 		if(localCommands.contains(registerValg.toLowerCase())) {
 			// Bruker skrev inn gyldig command
-			if(registerValg.toLowerCase().equals("bruker")) {
-				registerUser();
-			}
 			
 			if(registerValg.toLowerCase().equals("treningsøkt")) {
 				registerOkt();
@@ -86,29 +83,8 @@ public class Main{
 	}
 	
 	
-	public static void registerUser() {
-		System.out.println("------Registrering av ny bruker------\nHva er ditt personnummer?");
-		System.out.print("Personnummer: ");
-		String Pnr = scanner.next();
-		if(Pnr.toLowerCase().equals("home")) {
-			return;
-		}
-		try {
-			int PnrInt = Integer.parseInt(Pnr);
-			if(getController.eksistererPerson(Pnr)) {
-				System.out.println("Personen er allerede registrert.");
-				getController.printPersonNavn(Pnr);
-			} else {
-				registerController.regPerson(Pnr);
-			}
-		} catch (Exception e) {
-			System.out.println("Ugyldig personummer! Skriv inn et tall. Skriv home om du vil tilbake til hovedmenyen.");
-			registerUser();
-		}
-	}
-	
 	public static void performAction(String action) {
-		// Denne metoden mï¿½ holde if-setninger for hver av actions, og deretter kjï¿½re hver action sin metode.
+		// Denne metoden må inneholde if-setninger for hver av actions, og deretter kjøre hver action sin metode.
 		if(action.equals("help")) {
 			printHelp();
 		}
@@ -121,47 +97,12 @@ public class Main{
 			register();
 		}
 		
-		if(action.equals("login")) {
-			login();
-		}
-		
-		if(action.equals("checklogin")) {
-			checkLoginPnr();
-		}
 		
 		if(action.equals("load")) {
 			load();
 		}
 	}
 	
-	public static void login() {
-		// TODO
-		System.out.print("Skriv inn personnr du vil logge inn på:");
-		String loginPnr = scanner.next();
-		
-		if(loginPnr.toLowerCase().equals("home")) {
-			return;
-		}
-		
-		//Try catch her sjekker bare om personen skrev inn tall.
-		try {
-			int parsedIntCheck = Integer.parseInt(loginPnr);
-		} catch (Exception e) {
-			System.out.println("Personnummer må være tall!");
-			return;
-		}
-		if(getController.eksistererPerson(loginPnr)) {
-			// PersonIDen eksisterte, logger inn pÃ¥ denne.
-			loggedInPnr = loginPnr;
-			System.out.println("Du logget inn på personnummer: " + loginPnr);
-			System.out.print("Velkommen ");
-			getController.printPersonNavn(loginPnr);
-		}
-		else {
-			System.out.println("Ingen bruker registrert på pnr: " + loginPnr);
-			login();
-		}
-	}
 	
 	public static boolean checkIfInt(String inputString) {
 		try {
@@ -231,7 +172,7 @@ public class Main{
 	}
 	
 	public static void getSammeOvelsesgruppe() {
-		getController.printØvelseISammeGruppe();
+		getController.printØvelserIGruppe();
 	}
 	
 	public static void load() {
@@ -290,17 +231,6 @@ public class Main{
 		else {
 			System.out.println("Ugyldig action. Skriv 'help' om du trenger hjelp.");
 		}	
-	}
-	
-	public static void checkLoginPnr() {
-		System.out.println("Logged in Pnr er: " + loggedInPnr);
-		try {
-			int parsedInt = Integer.parseInt(loggedInPnr);
-			getController.printPersonNavn(loggedInPnr);
-		} catch (Exception e) {
-			// Ingen bruker pålogget.
-			return;
-		}
 	}
 	
 	public static void main(String args[]) {
