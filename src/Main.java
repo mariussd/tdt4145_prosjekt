@@ -175,11 +175,15 @@ public class Main{
 		getController.printØvelserIGruppe();
 	}
 	
+	public static void getPopularitet() {
+		getController.printPopularitet();
+	}
+	
 	public static void load() {
 		// kalles av bruker for å entre valgmenyen for å laste inn økter/øvelser/apparater/øvelsesgrupper
 		
-		List<String> localLoadCommands = Arrays.asList("treningsøkt", "øvelse", "apparat", "øvelsesgruppe", "resultatlogg", "ntreningsøkter", "sammeøvelsesgruppe");
-		System.out.println("Hva vil du laste inn? Her er valgene:\n - Treningsøkt - skriv 'treningsøkt'.\n - Øvelse - skriv 'øvelse'.\n - Apparat - skriv 'apparat'\n - Øvelsesgruppe - skriv 'øvelsesgruppe'.\n - Resultatlogg - skriv 'resultatlogg'.\n - 'N' Siste treningsøkter - skriv 'ntreningsøkter'.\n - Øvelser i samme øvelsesgruppe - skriv 'sammeøvelsesgruppe'.");
+		List<String> localLoadCommands = Arrays.asList("treningsøkt", "øvelse", "apparat", "øvelsesgruppe", "resultatlogg", "ntreningsøkter", "sammeøvelsesgruppe", "popularitet");
+		System.out.println("Hva vil du laste inn? Her er valgene:\n - Treningsøkt - skriv 'treningsøkt'.\n - Øvelse - skriv 'øvelse'.\n - Apparat - skriv 'apparat'\n - Øvelsesgruppe - skriv 'øvelsesgruppe'.\n - Resultatlogg - skriv 'resultatlogg'.\n - 'N' Siste treningsøkter - skriv 'ntreningsøkter'.\n - Øvelser i samme øvelsesgruppe - skriv 'sammeøvelsesgruppe'. \n - Mest populære apparat - skriv 'popularitet'.");
 		System.out.print("Skriv valg her: ");
 		String loadInput = scanner.next();
 		if(loadInput.equals("home")) {
@@ -209,6 +213,9 @@ public class Main{
 			}
 			else if(loadInput.equals("sammeøvelsesgruppe")) {
 				getSammeOvelsesgruppe();
+			}
+			else if(loadInput.equals("popularitet")) {
+				getPopularitet();
 			}
 		}
 		

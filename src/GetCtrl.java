@@ -54,7 +54,7 @@ public class GetCtrl extends DBCon {
 			System.out.println("Øvelseliste: ");
 			while(!rs.isLast()) {
 				rs.next();
-				System.out.println("ØvelseID: "+rs.getString("ØvelseID")+" "+"Navn: "+rs.getString("Navn");
+				System.out.println("ØvelseID: "+rs.getString("ØvelseID")+" "+"Navn: "+rs.getString("Navn"));
 			}
 		}
 		catch(Exception e){
@@ -246,6 +246,18 @@ public class GetCtrl extends DBCon {
 
 		}
 		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	public void printPopularitet() {
+		try {
+			
+			Statement stmt = conn.createStatement();
+			String query = "select *, count(TreningsøktID) as Antall from (ØvelseMedApparat natural join GjennomførelseMedApparat) natural join Apparat group by Apparat sort by desc";
+			
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
