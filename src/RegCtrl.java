@@ -288,25 +288,7 @@ public class RegCtrl extends DBCon {
 		
 	}
 	
-	public void regPerson(String Pnr) {
-		String navn;
-		
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Navn: ");
-		navn = "'" + sc.nextLine() + "'";
-		if (navn.equals("'null'")) {
-			navn = "null";
-		}
-		
-		try {
-			Statement st = conn.createStatement();
-			st.executeUpdate("INSERT INTO Person VALUES("+"'"+Pnr+"'"+","+navn+")");
-		}catch(Exception e) {
-			System.out.println("db error during insert of person: "+e);
-		}
-		
-	}
-	
+
 	public void regOvelseGruppe() {
 		String navn;
 		
